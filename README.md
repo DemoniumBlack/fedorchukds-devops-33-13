@@ -130,6 +130,9 @@
 
 ### Решение 5
 
+1. Написал код для output. Вывод output:
+
+![img_13.png](IMG/img_13.png)
 
 ------
 
@@ -137,9 +140,24 @@
 
 1. Используя null_resource и local-exec, примените ansible-playbook к ВМ из ansible inventory-файла.
 Готовый код возьмите из демонстрации к лекции [**demonstration2**](https://github.com/netology-code/ter-homeworks/tree/main/demonstration2).
-3. Дополните файл шаблон hosts.tftpl. 
+2. Дополните файл шаблон hosts.tftpl. 
 Формат готового файла:
 ```netology-develop-platform-web-0   ansible_host="<внешний IP-address или внутренний IP-address если у ВМ отсутвует внешний адрес>"```
 
 Для проверки работы уберите у ВМ внешние адреса. Этот вариант используется при работе через bastion-сервер.
 Для зачёта предоставьте код вместе с основной частью задания.
+
+### Решение 6
+
+1. Создал null_resource по примеру из  ***demonstration2***, но для выполнение ansible-playbook к ВМ пришлось увеличить время ожидания "sleep" до 120 секунд.
+
+Проверяю, результат работы Ansible, то есть установился ли Nginx:
+
+![img_14.png](IMG/img_14.png)
+
+Nginx установлен.
+
+2. Модифицировал файл hosts.tftpl. Запись ```ansible_host=${i["network_interface"][0]["nat_ip_address"]==null ? i["network_interface"][0]["ip_address"] : i["network_interface"][0]["nat_ip_address"]}``` устанавливает переменную ansible_host и проверяет, есть ли у хоста nat_ip_address. Если nat_ip_address равен null, то используется ip_address. В противном случае, если nat_ip_address не является null, то используется nat_ip_address.
+
+
+Листинг работы находится в директории SRC.
