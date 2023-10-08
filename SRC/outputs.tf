@@ -1,4 +1,4 @@
-
+/*
 locals {
   vm_web = {
     name = yandex_compute_instance.web[*].name
@@ -62,4 +62,24 @@ output "hosts" {
     }
   ]
 }
+*/
 
+output "all_vms" {
+  value = flatten([
+    [for i in yandex_compute_instance.web : {
+      name = i.name
+      id   = i.id
+      fqdn = i.fqdn
+    }],
+    [for i in [yandex_compute_instance.storage] : {
+      name = i.name
+      id   = i.id
+      fqdn = i.fqdn
+    }],
+    [for i in yandex_compute_instance.for_each : {
+      name = i.name
+      id   = i.id
+      fqdn = i.fqdn
+    }]
+  ])
+}
