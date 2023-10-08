@@ -1,7 +1,16 @@
 data "yandex_compute_image" "ubuntu-2004-lts" {
   family = "ubuntu-2004-lts"
 }
-
+variable "yandex_compute_instance_web" {
+  type        = map(map(number))
+  default = {
+    web_resources = {
+      cores         = 2
+      memory        = 1
+      core_fraction = 5
+    }
+  }
+}
 resource "yandex_compute_instance" "web" {
   name        = "web-${count.index+1}"
   platform_id = "standard-v1"
@@ -9,9 +18,9 @@ resource "yandex_compute_instance" "web" {
   count = 2
 
   resources {
-    cores         = 2
-    memory        = 1
-    core_fraction = 5
+    cores         = var.yandex_compute_instance_web.web_resources.cores
+    memory        = var.yandex_compute_instance_web.web_resources.memory
+    core_fraction = var.yandex_compute_instance_web.web_resources.core_fraction
   }
 
   boot_disk {
